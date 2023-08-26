@@ -13,11 +13,8 @@ const Register = () => {
     const [registrationResult, setRegistrationResult] = useState('');
 
     const history= useNavigate();
-    
-
     const handleRegister = async (e) => {
         e.preventDefault();
-      
         const newUser = { username, email, password, name };
         try {
           const response = await axios.post('http://164.52.212.11/knowledge/api/auth/signup', newUser);

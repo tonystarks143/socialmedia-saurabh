@@ -4,27 +4,22 @@ import "./login.scss";
 import { Link, useNavigate } from "react-router-dom"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-
 const loginUser = async (username, password) => {
     try {
         const response = await axios.post('http://164.52.212.11/knowledge/api/auth/signin', {
             username: username,
             password: password
         });
-
         const { data } = response;
         if (data && data.token) {
             sessionStorage.setItem('token', data.token);
         }
-
         return data;
     } catch (error) {
         console.error('An error occurred while logging in:', error);
         throw error;
     }
 };
-
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -37,38 +32,31 @@ const Login = () => {
             setUsername(storedUsername);
         }
     }, []);
-
     const handleLogin = async () => {
         try {
-            const data = await loginUser(username, password);
-    
+            const data = await loginUser(username, password);  
             if (data && data.token) {
                 setError('');
-                sessionStorage.setItem('token', data.token);
+                console.log("edataaaaaaa   "+ data.token);
+                localStorage.setItem("token", JSON.stringify(data.token));
                 // Display success toast notification
                 toast.success('Login successful!', {
                     position: toast.POSITION.TOP_RIGHT
                 });
                setTimeout(function(){
                 history('/');
-               }, 1000)
-               
+               }, 1000)               
             }
         } catch (error) {
             setError('An error occurred while logging in. Please check your credentials.');
-          
             toast.error('Login failed. Please check your credentials.', {
                 position: toast.POSITION.TOP_RIGHT
             });
         }
     };
-    
-
     useEffect(() => {
         localStorage.setItem('username', username);
     }, [username]);
-
-
     return (
         <div className="login">
              <ToastContainer />
@@ -109,5 +97,4 @@ const Login = () => {
         </div>
     );
 };
-
 export default Login;
